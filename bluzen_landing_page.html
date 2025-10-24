@@ -1,187 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <title>Bluzen – Focus Blueprint</title>
 
-  <!-- Preconnect & font -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
   <style>
-    :root{
+    :root {
       --bg: #f8f9fa;
-      --text: #0f1720;
-      --accent: #5f65f2;
+      --card: #fff;
+      --text: #0b1220;
       --muted: #6c757d;
+      --accent: #5f65f2;
       --radius: 12px;
-      --container-max: 680px;
-      --gap: 1rem;
     }
 
-    /* Mobile-first layout */
-    html { box-sizing: border-box; font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; scroll-behavior:smooth; }
-    *, *:before, *:after { box-sizing: inherit; }
-    body {
-      margin: 0;
-      background: var(--bg);
-      color: var(--text);
-      padding: 1rem;
-      -webkit-tap-highlight-color: transparent;
-      line-height: 1.5;
-    }
+    /* Base / mobile-first */
+    html { box-sizing: border-box; font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+    *,*::before,*::after { box-sizing: inherit; }
+    body { margin:0; background:var(--bg); color:var(--text); padding:1rem; -webkit-tap-highlight-color: transparent; line-height:1.4; }
 
     .wrap {
-      max-width: var(--container-max);
+      max-width: 680px;
+      width: min(96%, 680px);
       margin: 0 auto;
-      width: min(96%, var(--container-max));
-      background: white;
+      background: var(--card);
       border-radius: 14px;
       padding: 1.25rem;
-      box-shadow: 0 6px 20px rgba(18, 25, 40, 0.06);
+      box-shadow: 0 6px 20px rgba(18,25,40,0.06);
     }
 
-    header {
-      display: flex;
-      gap: var(--gap);
-      align-items: start;
-      flex-direction: column;
-    }
+    h1 { margin:0; font-weight:700; font-size:clamp(1.25rem,5vw,1.75rem); color:var(--text); }
+    .lede { margin-top:0.5rem; color:var(--muted); font-size:1rem; }
 
-    h1 {
-      margin: 0;
-      font-weight: 700;
-      font-size: clamp(1.25rem, 5vw, 1.75rem);
-      line-height: 1.05;
-      color: #0b1220;
-    }
-
-    .lede {
-      margin: 0;
-      color: var(--muted);
-      font-size: clamp(0.95rem, 3.5vw, 1rem);
-    }
-
-    .controls {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 0.75rem;
-      margin-top: 0.75rem;
-    }
-
+    .controls { display:grid; grid-template-columns:1fr; gap:0.75rem; margin-top:0.9rem; }
     .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      width: 100%;
-      padding: 0.85rem 1rem;
-      background: var(--accent);
-      color: white;
-      text-decoration: none;
-      border: 0;
-      border-radius: var(--radius);
-      font-weight: 600;
-      font-size: 1rem;
-      cursor: pointer;
-      text-align: center;
-      transition: transform 120ms ease, box-shadow 120ms ease;
+      display:inline-flex; align-items:center; justify-content:center;
+      padding:.85rem 1rem; border-radius:12px; background:var(--accent); color:#fff;
+      border:0; font-weight:600; font-size:1rem; cursor:pointer; text-decoration:none;
     }
-    .btn:active { transform: translateY(1px); }
-    .btn:focus-visible { outline: 3px solid rgba(95,101,242,0.18); outline-offset: 2px; }
+    .btn.secondary { background:#eef0ff; color:var(--text); }
 
-    .btn.secondary {
-      background: #eef0ff;
-      color: #0b1220;
-      box-shadow: none;
-      font-weight: 600;
-    }
+    .body-copy { margin-top:1rem; font-size:0.98rem; color:var(--text); }
 
-    .body-copy {
-      margin-top: 1rem;
-      color: var(--text);
-      font-size: 0.98rem;
-    }
-
-    /* Modal */
+    /* Modal overlay */
     .modal {
-      position: fixed;
-      inset: 0;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      background: rgba(8,12,20,0.45);
-      z-index: 1200;
-      padding: 1rem;
-      -webkit-overflow-scrolling: touch;
+      position: fixed; inset:0; display:none; align-items:center; justify-content:center;
+      background: rgba(8,12,20,0.45); z-index:1200; padding:1rem; -webkit-overflow-scrolling: touch;
     }
-    .modal.open { display: flex; }
+    .modal.open { display:flex; }
 
     .modal-dialog {
-      width: 100%;
-      max-width: 920px;
-      background: linear-gradient(180deg,#fff,#fbfdff);
-      border-radius: 14px;
-      overflow: hidden;
-      box-shadow: 0 10px 40px rgba(10,18,40,0.12);
-      display: flex;
-      flex-direction: column;
-      max-height: 96vh;
+      width:100%; max-width:920px; background:linear-gradient(180deg,#fff,#fbfdff);
+      border-radius:14px; overflow:hidden; box-shadow:0 10px 40px rgba(10,18,40,0.12);
+      display:flex; flex-direction:column; max-height:96vh;
     }
+    @media (max-width:640px) { .modal-dialog { border-radius:.75rem; height:100%; max-height:100vh; } }
 
-    /* Full-screen style for small screens */
-    @media (max-width: 640px) {
-      .modal-dialog { border-radius: 0.75rem; height: 100%; max-height: 100vh; }
-    }
+    .modal-header { display:flex; align-items:center; justify-content:space-between; padding:.9rem 1rem; border-bottom:1px solid rgba(10,18,40,0.04); }
+    .modal-title { margin:0; font-size:1rem; font-weight:700; }
+    .modal-close { background:transparent; border:0; font-size:1.25rem; padding:.35rem; cursor:pointer; color:var(--muted); }
+    .modal-close:focus { outline:3px solid rgba(95,101,242,0.16); border-radius:6px; }
 
-    .modal-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0.9rem 1rem;
-      border-bottom: 1px solid rgba(10,18,40,0.04);
-    }
-    .modal-title { margin: 0; font-size: 1rem; font-weight: 700; color: var(--text); }
-    .modal-close {
-      background: transparent;
-      border: 0;
-      font-size: 1.25rem;
-      line-height: 1;
-      padding: 0.35rem;
-      cursor: pointer;
-      color: var(--muted);
-    }
-    .modal-close:focus { outline: 3px solid rgba(95,101,242,0.16); border-radius: 6px; }
+    .modal-body { padding:.75rem; flex:1 1 auto; display:flex; flex-direction:column; gap:.5rem; min-height:240px; overflow:auto; }
 
-    .modal-body {
-      padding: 0.75rem;
-      flex: 1 1 auto;
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-      min-height: 240px;
-      overflow: auto;
-    }
+    .quiz-placeholder { display:flex; align-items:center; justify-content:center; padding:1rem; color:var(--muted); background:rgba(250,250,255,0.7); border-radius:10px; }
 
-    .quiz-placeholder {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--muted);
-      padding: 1rem;
-      background: rgba(250,250,255,0.7);
-      border-radius: 10px;
-    }
-
-    /* Accessibility helper for visually hidden labels */
-    .visually-hidden { position: absolute !important; height: 1px; width: 1px; overflow: hidden; clip: rect(1px,1px,1px,1px); white-space: nowrap; }
-
-    /* Respect reduced motion */
-    @media (prefers-reduced-motion: reduce) {
-      * { transition: none !important; }
-    }
+    /* small helper */
+    .visually-hidden { position:absolute!important; height:1px;width:1px;overflow:hidden;clip:rect(1px,1px,1px,1px);white-space:nowrap; }
+    @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
   </style>
 </head>
 <body>
@@ -192,18 +84,16 @@
     </header>
 
     <div class="controls" aria-hidden="false">
-      <!-- This button opens the modal and lazy-loads the quiz app -->
-      <button class="btn" id="open-quiz" aria-haspopup="dialog" aria-controls="quiz-modal">Take the Quiz</button>
-      <a href="/about" class="btn secondary" id="learn-more" rel="noopener noreferrer">Learn More</a>
+      <button id="open-quiz" class="btn" aria-haspopup="dialog" aria-controls="quiz-modal">Take the Quiz</button>
+      <a href="/about" class="btn secondary">Learn More</a>
     </div>
 
     <p class="body-copy"><strong>At Bluzen, our focus is on making self-regulation clear, practical, and sustainable for neurodivergent minds.</strong> By combining hypnotherapy, neuroscience, and education, we help people understand how their brain and nervous system actually work — and how to work with them, not against them. <strong>Our goal is to redefine what support looks like:</strong> accessible, evidence-based, and built for the way modern minds really function.</p>
 
-    <!-- Non-JS users: direct link to the quiz or inline iframe -->
     <noscript>
-      <div style="margin-top:1rem; padding:0.85rem; background:#fff8; border-radius:10px;">
-        <p style="margin:0 0 .5rem 0; color:var(--muted)">JavaScript is disabled. Open the quiz directly:</p>
-        <a href="https://yourquizplatform.com/embed/bluzen-quiz" style="display:inline-block;padding:.6rem .9rem;background:var(--accent);color:#fff;border-radius:10px;text-decoration:none;font-weight:600;" target="_blank" rel="noopener noreferrer">Open the quiz</a>
+      <div style="margin-top:1rem;padding:.85rem;background:#fff8;border-radius:10px;">
+        <p style="margin:0 0 .5rem 0;color:var(--muted)">JavaScript is disabled. Open the quiz directly:</p>
+        <a href="https://clever-kataifi-2d2a29.netlify.app/" style="display:inline-block;padding:.6rem .9rem;background:var(--accent);color:#fff;border-radius:10px;text-decoration:none;font-weight:600;" target="_blank" rel="noopener noreferrer">Open the quiz</a>
       </div>
     </noscript>
   </main>
@@ -213,51 +103,51 @@
     <div class="modal-dialog" role="document">
       <div class="modal-header">
         <h2 id="modal-title" class="modal-title">Focus Blueprint — 2-minute quiz</h2>
-        <button class="modal-close" id="modal-close" aria-label="Close quiz dialog">&times;</button>
+        <button id="modal-close" class="modal-close" aria-label="Close quiz dialog">&times;</button>
       </div>
 
-      <div class="modal-body" id="modal-body">
+      <div id="modal-body" class="modal-body">
         <div id="quiz-placeholder" class="quiz-placeholder">The quiz will load when you open it — this helps save mobile data.</div>
       </div>
     </div>
   </div>
 
-  <!-- Template containing the quiz app (scoped styles inside) -->
+  <!-- Template: full quiz HTML copied from your public build -->
   <template id="quiz-template">
-    <div id="quiz-app">
+    <div id="quiz-injected-root">
+      <!-- Scoped styles & markup (exactly from the public quiz build, adapted for injection) -->
       <style>
-        /* Scoped quiz styles (from provided quiz code) */
-        #quiz-app{ --bg:#0f1115; --card:#151821; --ink:#e8ecf1; --muted:#a9b3c1; --accent:#64DED4; --shadow: 0 10px 30px rgba(0,0,0,.35); --radius: 16px; font-family: 'Montserrat', system-ui, -apple-system, 'Segoe UI', Roboto, Arial; }
-        #quiz-app *{box-sizing:border-box}
-        #quiz-app .wrap{ max-width:920px; margin:32px auto 80px; padding:0 20px; }
-        #quiz-app header{ display:flex; align-items:center; gap:16px; margin-bottom:24px; }
-        #quiz-app .logo{ width:42px; height:42px; border-radius:12px; background: linear-gradient(135deg, var(--accent), #4ab8b0); box-shadow:var(--shadow); overflow: hidden; display: flex; align-items: center; justify-content: center; }
-        #quiz-app .logo img { width:100%; height:100%; object-fit:cover; }
-        #quiz-app h1{ font-size:26px; margin:0; font-weight:700; letter-spacing:.2px; color:var(--ink); }
-        #quiz-app .intro{ background:linear-gradient(180deg, rgba(100,222,212,.06), rgba(100,222,212,.0)); border:1px solid rgba(100,222,212,.18); border-radius:var(--radius); padding:24px; box-shadow:var(--shadow); margin-bottom:28px; }
-        #quiz-app .intro p{margin:0 0 10px;color:var(--muted)}
-        #quiz-app .card{ background:var(--card); border:1px solid rgba(255,255,255,.06); border-radius:var(--radius); padding:22px; box-shadow:var(--shadow); margin-bottom:18px; }
-        #quiz-app .q{ display:grid; grid-template-columns: 1fr; gap:10px; margin:14px 0; }
-        #quiz-app .q label{ font-weight:600; color:var(--ink); }
-        #quiz-app .scale{ display:flex; align-items:center; gap:12px; }
-        #quiz-app input[type=range]{ -webkit-appearance:none; appearance:none; width:100%; height:6px; background:rgba(255,255,255,.08); border-radius:999px; outline:none; touch-action: pan-x; }
-        #quiz-app input[type=range]::-webkit-slider-thumb{ -webkit-appearance:none; appearance:none; width:22px; height:22px; border-radius:50%; background:var(--accent); border:2px solid #0c1212; box-shadow:0 2px 8px rgba(100,222,212,.5); cursor:pointer; margin-top:-8px; }
-        #quiz-app .tick{ font-size:12px; color:var(--muted); width:70px; text-align:center; user-select:none; }
-        #quiz-app .btn{ display:inline-flex; align-items:center; justify-content:center; padding:12px 18px; border-radius:12px; background:var(--accent); color: #062d2a; font-weight:700; border:none; box-shadow:var(--shadow); cursor:pointer; transition:transform .04s ease, filter .2s ease; touch-action: manipulation; }
-        #quiz-app .btn:active{ transform: translateY(1px) }
-        #quiz-app .btn.secondary{ background:transparent; color:var(--ink); border:1px solid rgba(255,255,255,.14); }
-        #quiz-app .actions{ display:flex; gap:12px; flex-wrap:wrap; margin-top:8px }
-        #quiz-app .hidden{ display:none }
-        #quiz-app .result, #quiz-app .ending{ background:var(--card); border:1px solid rgba(255,255,255,.06); border-radius:var(--radius); padding:22px; box-shadow:var(--shadow); margin-top:18px; }
-        #quiz-app .result h2, #quiz-app .ending h2{ margin:0 0 8px 0; font-size:20px; color:var(--ink); }
-        #quiz-app .result p, #quiz-app .ending p{ color:var(--muted); margin:8px 0; }
-        #quiz-app footer{ margin-top:40px; color:var(--muted); font-size:12px; text-align:center; }
-        #quiz-app .grid{ display:grid; gap:14px; }
-        @media (min-width:820px){ #quiz-app .grid{ grid-template-columns: 1fr 1fr } }
-        #quiz-app .pill{ display:inline-flex; gap:10px; align-items:center; background:rgba(100,222,212,.1); color:#bff5ef; padding:6px 10px; border-radius:999px; border:1px solid rgba(100,222,212,.25); font-size:12px; margin-bottom:4px; }
+        :root{ --bg:#0f1115; --card:#151821; --ink:#e8ecf1; --muted:#a9b3c1; --accent:#64DED4; --shadow: 0 10px 30px rgba(0,0,0,.35); --radius: 16px; }
+        #quiz-injected-root *{box-sizing:border-box}
+        #quiz-injected-root .wrap{ max-width:920px; margin:32px auto 80px; padding:0 20px; }
+        #quiz-injected-root header{ display:flex; align-items:center; gap:16px; margin-bottom:24px; }
+        #quiz-injected-root .logo{ width:42px; height:42px; border-radius:12px; background: linear-gradient(135deg, var(--accent), #4ab8b0); box-shadow:var(--shadow); overflow: hidden; display: flex; align-items: center; justify-content: center; }
+        #quiz-injected-root .logo img { width:100%; height:100%; object-fit:cover; }
+        #quiz-injected-root h1{ font-size:26px; margin:0; font-weight:700; letter-spacing:.2px; color:var(--ink); }
+        #quiz-injected-root .intro{ background:linear-gradient(180deg, rgba(100,222,212,.06), rgba(100,222,212,.0)); border:1px solid rgba(100,222,212,.18); border-radius:var(--radius); padding:24px; box-shadow:var(--shadow); margin-bottom:28px; }
+        #quiz-injected-root .intro p{margin:0 0 10px;color:var(--muted)}
+        #quiz-injected-root .card{ background:var(--card); border:1px solid rgba(255,255,255,.06); border-radius:var(--radius); padding:22px; box-shadow:var(--shadow); margin-bottom:18px; }
+        #quiz-injected-root .q{ display:grid; grid-template-columns: 1fr; gap:10px; margin:14px 0; }
+        #quiz-injected-root .q label{ font-weight:600; color:var(--ink); }
+        #quiz-injected-root .scale{ display:flex; align-items:center; gap:12px; }
+        #quiz-injected-root input[type=range]{ -webkit-appearance:none; appearance:none; width:100%; height:6px; background:rgba(255,255,255,.08); border-radius:999px; outline:none; touch-action: pan-x; }
+        #quiz-injected-root input[type=range]::-webkit-slider-thumb{ -webkit-appearance:none; appearance:none; width:22px; height:22px; border-radius:50%; background:var(--accent); border:2px solid #0c1212; box-shadow:0 2px 8px rgba(100,222,212,.5); cursor:pointer; margin-top:-8px; }
+        #quiz-injected-root .tick{ font-size:12px; color:var(--muted); width:70px; text-align:center; user-select:none; }
+        #quiz-injected-root .btn{ display:inline-flex; align-items:center; justify-content:center; padding:12px 18px; border-radius:12px; background:var(--accent); color:#062d2a; font-weight:700; border:none; box-shadow:var(--shadow); cursor:pointer; transition:transform .04s ease, filter .2s ease; touch-action: manipulation; }
+        #quiz-injected-root .btn:active{ transform: translateY(1px) }
+        #quiz-injected-root .btn.secondary{ background:transparent; color:var(--ink); border:1px solid rgba(255,255,255,.14); }
+        #quiz-injected-root .actions{ display:flex; gap:12px; flex-wrap:wrap; margin-top:8px }
+        #quiz-injected-root .hidden{ display:none }
+        #quiz-injected-root .result, #quiz-injected-root .ending{ background:var(--card); border:1px solid rgba(255,255,255,.06); border-radius:var(--radius); padding:22px; box-shadow:var(--shadow); margin-top:18px; }
+        #quiz-injected-root .result h2, #quiz-injected-root .ending h2{ margin:0 0 8px 0; font-size:20px; }
+        #quiz-injected-root .result p, #quiz-injected-root .ending p{ color:var(--muted); margin:8px 0; }
+        #quiz-injected-root footer{ margin-top:40px; color:var(--muted); font-size:12px; text-align:center; }
+        #quiz-injected-root .grid{ display:grid; gap:14px; }
+        @media (min-width:820px){ #quiz-injected-root .grid{ grid-template-columns: 1fr 1fr } }
+        #quiz-injected-root .pill{ display:inline-flex; gap:10px; align-items:center; background:rgba(100,222,212,.1); color:#bff5ef; padding:6px 10px; border-radius:999px; border:1px solid rgba(100,222,212,.25); font-size:12px; margin-bottom:4px; }
 
         /* MailerLite embed tweaks (scoped) */
-        #quiz-app .ml-embedded, #quiz-app .ml-form-embedContainer, #quiz-app .ml-form-embedWrapper, #quiz-app .ml-form-embedBody, #quiz-app .ml-form-embed {
+        #quiz-injected-root .ml-embedded, #quiz-injected-root .ml-form-embedContainer, #quiz-injected-root .ml-form-embedWrapper, #quiz-injected-root .ml-form-embedBody, #quiz-injected-root .ml-form-embed { 
           background: none !important;
           color: var(--ink) !important;
           font-family: 'Montserrat', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif !important;
@@ -269,29 +159,29 @@
           width: 100% !important;
           max-width: 420px !important;
         }
-        #quiz-app .ml-embedded input[type="email"], #quiz-app .ml-embedded input[type="text",
-        #quiz-app .ml-form-embedBody input[type="email"], #quiz-app .ml-form-embedBody input[type="text"] {
+        #quiz-injected-root .ml-embedded input[type="email"], #quiz-injected-root .ml-embedded input[type="text",
+        #quiz-injected-root .ml-form-embedBody input[type="email"], #quiz-injected-root .ml-form-embedBody input[type="text"] {
           width: 100% !important; background-color: #16191C !important; color: #F5F5F5 !important;
           border: 1px solid #2A2D30 !important; border-radius: 10px !important;
           padding: 12px 14px !important; font-size: 17px !important; margin-top: 10px !important;
         }
-        #quiz-app .ml-embedded input[type="email"]::placeholder, #quiz-app .ml-embedded input[type="text"]::placeholder { color: #B0B3B5 !important; }
-        #quiz-app .ml-embedded input[type="email"]:focus, #quiz-app .ml-embedded input[type="text"]:focus {
+        #quiz-injected-root .ml-embedded input[type="email"]::placeholder, #quiz-injected-root .ml-embedded input[type="text"]::placeholder { color: #B0B3B5 !important; }
+        #quiz-injected-root .ml-embedded input[type="email"]:focus, #quiz-injected-root .ml-embedded input[type="text"]:focus {
           border-color: #64DED4 !important; background-color: #1C1F23 !important;
           outline: none !important; box-shadow: 0 0 6px rgba(100, 222, 212, 0.3) !important;
         }
-        #quiz-app .ml-embedded button, #quiz-app .ml-embedded input[type="submit"], #quiz-app .ml-form-embedBody .primary {
+        #quiz-injected-root .ml-embedded button, #quiz-injected-root .ml-embedded input[type="submit"], #quiz-injected-root .ml-form-embedBody .primary {
           background-color: #64DED4 !important; color: #0F1113 !important; border: none !important;
           border-radius: 10px !important; padding: 12px 18px !important; font-size: 16px !important;
           font-weight: 600 !important; cursor: pointer !important; width: 100% !important; margin-top: 16px !important;
           transition: background-color .25s ease, transform .1s ease !important;
         }
-        #quiz-app .ml-embedded button:hover, #quiz-app .ml-embedded input[type="submit"]:hover, #quiz-app .ml-form-embedBody .primary:hover {
+        #quiz-injected-root .ml-embedded button:hover, #quiz-injected-root .ml-embedded input[type="submit"]:hover, #quiz-injected-root .ml-form-embedBody .primary:hover {
           background-color: #4AC6BD !important; transform: translateY(-1px) !important;
         }
-        #quiz-app .ml-form-embedFooter, #quiz-app .ml-form-successContent .ml-form-successContentFooter,
-        #quiz-app .ml-form-success, #quiz-app .ml-form-successContent { display: none !important; }
-        #quiz-app .ml-after-message {
+        #quiz-injected-root .ml-form-embedFooter, #quiz-injected-root .ml-form-successContent .ml-form-successContentFooter,
+        #quiz-injected-root .ml-form-success, #quiz-injected-root .ml-form-successContent { display: none !important; }
+        #quiz-injected-root .ml-after-message {
           background: rgba(100,222,212,.07);
           border-radius: 12px;
           padding: 16px 18px;
@@ -300,7 +190,7 @@
           font-size: 1.07em;
           animation: fadeIn 0.4s;
         }
-        #quiz-app .ml-email-prompt {
+        #quiz-injected-root .ml-email-prompt {
           margin-bottom: 13px;
           margin-top: 16px;
           font-size: 1.12em;
@@ -313,58 +203,168 @@
           box-shadow: 0 2px 10px rgba(100,222,212,0.04);
         }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px);} to { opacity: 1; transform: translateY(0);} }
-        /* iOS zoom fix */
-        #quiz-app input[type="email"], #quiz-app input[type="text"] { font-size: 17px !important; }
       </style>
 
       <div class="wrap">
         <header>
           <div class="logo" aria-hidden="true">
-            <img src="logo.png" alt="Bluzen Logo" />
+            <!-- base64 small inline logo used in original build -->
+            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAUAAAABACAMAAACdt4HsAAAAGFBMVEXMzMyWlpbPz8/09PTc3NxgYGB/f3+jo6N4eHh8fHyoK3nPAAAACXBIWXMAAA7EAAAOxAGVKw4bAAABwUlEQVR4nO3a0W7CMBBG4f9yA5s2vV6Kz8gE8ZbRr7Wx3lDZ7c8GDl2hJQAAAAAAAAAAcF6yQ7PJlDFzNn6wllK6N8g2LQp2H1+z5wF0d3rW3z6ZxZkhlq3pZnyAzrJwKzZ6e2L5VfF3Z6kZ6rT7nX5SLfXbJ6nQ7zeH2zC6q+vK2W6w0J7kW9j8vwZr3i6yZbvfXn3Z0pHN4n/d5p5W+s4+0Zb/8iYf3yX3yR/ax/G0+OqQ/8w8y5vNwmw2oZ6Q4bQ1YzT8YxQmP3jZkJk7zj9F6s/vK0j9H+zXH4xF+o7nX7w1Tn+7n+6Kkb5d9nQX7k8xO8u1N9f8y08Ce3bJ8el2Wl9cW0tQ/6dn+q/8I3Wk7o/4gHAAAAAAAAAADwL34A4oM8Blg7M/YAAAAASUVORK5CYII=" alt="Bluzen Logo" />
           </div>
           <h1>Bluzen Cognitive Regulation Quiz</h1>
         </header>
 
-        <section class="intro card">
-          <p class="pill">2-minute quiz</p>
-          <p class="lead" style="margin:0;color:var(--muted)">Understand how your attention, overwhelm, and recovery work so you can make simple, practical changes.</p>
+        <section class="intro">
+          <div class="pill">About this reflection</div>
+          <p><strong>This isn’t a medical or diagnostic test.</strong></p>
+          <p>It’s a short reflection designed to highlight how your focus, energy, and motivation tend to behave in everyday life.</p>
+          <p>The result will show which cognitive pattern you relate to most — and offer practical steps to improve balance and performance.</p>
         </section>
 
-        <!-- Simplified quiz skeleton (the rest of your detailed quiz HTML/JS can be added here) -->
-        <div id="quiz-root">
-          <div class="card">
+        <section id="quiz" class="card">
+          <div class="grid">
             <div class="q">
-              <label for="q1">When you start a task, how often do you feel focused?</label>
+              <label for="q1">1) Even when I know what to do, I find it hard to begin.</label>
               <div class="scale">
-                <input id="q1" type="range" min="0" max="100" value="50">
+                <div class="tick">Not at all</div>
+                <input id="q1" type="range" min="1" max="5" value="3">
+                <div class="tick">Always</div>
               </div>
-              <div class="tick">Sometimes</div>
             </div>
-
-            <div class="actions">
-              <button id="quiz-next" class="btn">Next</button>
-              <button id="quiz-skip" class="btn secondary">Skip</button>
+            <div class="q">
+              <label for="q2">2) I spend more time planning things than actually doing them.</label>
+              <div class="scale">
+                <div class="tick">Not at all</div>
+                <input id="q2" type="range" min="1" max="5" value="3">
+                <div class="tick">Always</div>
+              </div>
+            </div>
+            <div class="q">
+              <label for="q3">3) I go through intense bursts of focus or motivation, then burn out or crash afterward.</label>
+              <div class="scale">
+                <div class="tick">Not at all</div>
+                <input id="q3" type="range" min="1" max="5" value="3">
+                <div class="tick">Always</div>
+              </div>
+            </div>
+            <div class="q">
+              <label for="q4">4) I need background noise to stay switched on.</label>
+              <div class="scale">
+                <div class="tick">Not at all</div>
+                <input id="q4" type="range" min="1" max="5" value="3">
+                <div class="tick">Always</div>
+              </div>
+            </div>
+            <div class="q">
+              <label for="q5">5) I get easily drained by noise, people, or too many inputs at once.</label>
+              <div class="scale">
+                <div class="tick">Not at all</div>
+                <input id="q5" type="range" min="1" max="5" value="3">
+                <div class="tick">Always</div>
+              </div>
+            </div>
+            <div class="q">
+              <label for="q6">6) I can focus deeply, but often on the wrong thing or at the wrong time.</label>
+              <div class="scale">
+                <div class="tick">Not at all</div>
+                <input id="q6" type="range" min="1" max="5" value="3">
+                <div class="tick">Always</div>
+              </div>
+            </div>
+            <div class="q">
+              <label for="q7">7) I know I’m capable of more, but something keeps me from building momentum.</label>
+              <div class="scale">
+                <div class="tick">Not at all</div>
+                <input id="q7" type="range" min="1" max="5" value="3">
+                <div class="tick">Always</div>
+              </div>
+            </div>
+            <div class="q">
+              <label for="q8">8) When I feel restless or flat, I catch myself scrolling or checking my phone without meaning to.</label>
+              <div class="scale">
+                <div class="tick">Not at all</div>
+                <input id="q8" type="range" min="1" max="5" value="3">
+                <div class="tick">Always</div>
+              </div>
             </div>
           </div>
 
-          <div class="result hidden" id="quiz-result">
-            <h2>Your Focus Blueprint</h2>
-            <p class="muted">A short personalised insight — upgradeable with your email.</p>
-            <!-- MailerLite embed placeholder (the platform script will convert this) -->
-            <div class="ml-form-embedContainer ml-site-1530129" data-account="1530129">
-              <!-- Real MailerLite embed will be initialized by their universal script -->
+          <div class="actions">
+            <button id="seeResult" class="btn" type="button">See your result</button>
+            <button id="reset" class="btn secondary" type="button">Reset</button>
+          </div>
+        </section>
+
+        <section id="result" class="result hidden" aria-live="polite">
+          <h2 id="resultTitle"></h2>
+          <div id="resultBody"></div>
+
+          <div id="ml-email-prompt" class="ml-email-prompt" style="display:none;"></div>
+
+          <!-- Six MailerLite containers (one for each archetype) -->
+          <div id="ml-overload" class="ml-form" style="display:none;">
+            <div class="ml-embedded" data-form="0CcntT"></div>
+            <div class="ml-after-message hidden" id="after-overload">
+              Your focus and determination are clear — you give your best to what you do.<br>
+              The next step isn’t slowing down, it’s learning how to recover without losing momentum.<br>
+              You’ll receive a short follow-up on building sustainable focus and pacing your energy effectively.
             </div>
           </div>
-        </div>
+          <div id="ml-loop" class="ml-form" style="display:none;">
+            <div class="ml-embedded" data-form="3N6KYx"></div>
+            <div class="ml-after-message hidden" id="after-loop">
+              You think deeply and see patterns others miss.<br>
+              The challenge isn’t awareness — it’s finding a point of release.<br>
+              The follow-up you’ll receive will focus on simple methods to ease overthinking and move forward with clarity.
+            </div>
+          </div>
+          <div id="ml-stimulation" class="ml-form" style="display:none;">
+            <div class="ml-embedded" data-form="gco1YF"></div>
+            <div class="ml-after-message hidden" id="after-stimulation">
+              You run best on movement and challenge — it’s what keeps you sharp.<br>
+              But it can’t always come from pressure.<br>
+              The follow-up you’ll receive will share techniques for keeping your drive steady, even when things slow down.
+            </div>
+          </div>
+          <div id="ml-initiation" class="ml-form" style="display:none;">
+            <div class="ml-embedded" data-form="YcrWvh"></div>
+            <div class="ml-after-message hidden" id="after-initiation">
+              You know what needs to be done — it’s just getting started that feels heavy.<br>
+              The follow-up you’ll receive focuses on momentum — helping you get past that first step without relying on force or willpower alone.
+            </div>
+          </div>
+          <div id="ml-input" class="ml-form" style="display:none;">
+            <div class="ml-embedded" data-form="INhHx8"></div>
+            <div class="ml-after-message hidden" id="after-input">
+              You take in more than most — and that awareness is valuable when it’s balanced.<br>
+              The follow-up you’ll receive will share calm, practical ways to protect your focus and energy in overstimulating settings.
+            </div>
+          </div>
+          <div id="ml-balanced" class="ml-form" style="display:none;">
+            <div class="ml-embedded" data-form="h0T0Yf"></div>
+            <div class="ml-after-message hidden" id="after-balanced">
+              You’ve developed an adaptable style of focus — able to adjust to what’s needed.<br>
+              The follow-up you’ll receive will give small, steady habits to keep that balance strong, even when life gets busy.
+            </div>
+          </div>
+        </section>
 
-        <footer>
-          <small>Privacy-focused. No unnecessary tracking.</small>
-        </footer>
+        <section id="ending" class="ending hidden">
+          <h2>Next steps</h2>
+          <div id="endingBody"></div>
+          <div class="actions" style="margin-top:14px;">
+            <a id="offerLink" class="btn" href="#" target="_blank" rel="noopener">See what we have to offer</a>
+            <a id="calendlyLink" class="btn secondary" href="#" target="_blank" rel="noopener">Book a 15-minute discovery call</a>
+          </div>
+        </section>
+
+        <footer>© Bluzen · Reflective tool, not a diagnostic assessment.</footer>
       </div>
     </div>
   </template>
 
   <script>
+    // Modal + injector + initialization script
     (function () {
       var openBtn = document.getElementById('open-quiz');
       var modal = document.getElementById('quiz-modal');
@@ -372,7 +372,7 @@
       var modalBody = document.getElementById('modal-body');
       var template = document.getElementById('quiz-template');
       var previouslyFocused = null;
-      var quizLoaded = false;
+      var quizInjected = false;
 
       function getFocusable(el) {
         if (!el) return [];
@@ -380,55 +380,219 @@
           .filter(function (node) { return node.offsetWidth > 0 || node.offsetHeight > 0 || node === document.activeElement; });
       }
 
-      // Inject the quiz HTML (from the template) into the modal body and load MailerLite
-      function loadQuizApp() {
-        if (quizLoaded) return;
+      function injectQuiz() {
+        if (quizInjected) return;
+        // clone template and append
         var content = template.content.cloneNode(true);
-        // extract the mailerlite account if present
-        var mlContainer = content.querySelector('.ml-site-1530129');
-        modalBody.innerHTML = ''; // clear placeholder
+        // append to modal body
+        // clear placeholder first
+        modalBody.innerHTML = '';
         modalBody.appendChild(content);
-        quizLoaded = true;
+        quizInjected = true;
 
-        // Load MailerLite universal script and init account (if container exists)
-        if (mlContainer) {
-          var account = mlContainer.getAttribute('data-account');
-          if (account && typeof window.ml === 'undefined') {
-            var s = document.createElement('script');
-            s.src = 'https://assets.mailerlite.com/js/universal.js';
-            s.async = true;
-            s.onload = function () {
-              try { window.ml('account', account); } catch (e) { /* ignore */ }
-            };
-            document.body.appendChild(s);
-          } else if (account && window.ml) {
-            try { window.ml('account', account); } catch (e) { }
+        // Ensure MailerLite universal script is loaded (only once)
+        if (typeof window.ml === 'undefined') {
+          var mlScript = document.createElement('script');
+          mlScript.src = 'https://assets.mailerlite.com/js/universal.js';
+          mlScript.async = true;
+          mlScript.onload = function () {
+            try { window.ml('account', '1530129'); } catch (e) { /* ignore */ }
+            // initialize MailerLite handlers after script loads
+            safeInitQuizJs();
+          };
+          document.body.appendChild(mlScript);
+        } else {
+          try { window.ml('account', '1530129'); } catch (e) { /* ignore */ }
+          safeInitQuizJs();
+        }
+      }
+
+      // Run the quiz JS in the injected DOM context.
+      // We collect the necessary functions and attach events here.
+      function safeInitQuizJs() {
+        // Small helpers and the quiz logic (adapted from your public build)
+        function byId(id) { return document.getElementById(id); }
+
+        var mapping = {
+          overload:    [0,0,1,0,0,1,0,0],
+          loop:        [0,1,0,0,0,0,1,1],
+          stimulation: [0,0,0,1,0,1,0,1],
+          initiation:  [1,1,0,0,0,0,1,0],
+          input:       [0,0,0,0,1,0,0,1],
+        };
+
+        var titles = {
+          overload: "High Drive",
+          loop: "Cognitive Loop",
+          stimulation: "Stimulation Driven",
+          initiation: "Initiation Block",
+          input: "Sensory Sensitivity",
+          balanced: "Adaptive Focus"
+        };
+
+        var resultCopy = {
+          overload: '<p>You focus hard and give a lot of yourself to what you do, but it often comes at a cost. When the pressure builds, your mind doesn’t switch off easily — it stays engaged until exhaustion forces a pause.</p><p>You don’t need to lose that drive. The aim is to keep it steady, so effort feels sustainable instead of draining.</p>',
+          loop: '<p>You think deeply and see patterns others miss, but that awareness can turn against you. Thoughts replay, plans stretch too far ahead, and decisions can start to feel heavier the more you analyse them.</p><p>The goal isn’t to think less — it’s to help your mind find an endpoint and move forward with confidence.</p>',
+          stimulation: '<p>You operate best when there’s movement, challenge, or urgency. When things slow down, focus fades, and it’s easy to start chasing stimulation just to feel engaged again.</p><p>The aim is to build motivation that doesn’t rely on chaos — focus that switches on by choice, not by pressure.</p>',
+          initiation: '<p>You usually know what needs to be done, but starting can feel harder than it should. Once you begin, things click — it’s the getting started that feels heavy or uncertain.</p><p>This isn’t a lack of willpower. It’s a focus pattern that responds best to gentle activation and clear direction.</p>',
+          input: '<p>You notice a lot — tone, detail, mood, tension — and it can all hit at once. When too much comes in, focus scatters and energy drops fast.</p><p>That sensitivity isn’t the problem; it’s the lack of space around it. Learning to manage input helps turn awareness into clarity.</p>',
+          balanced: '<p>No single pattern stands out strongly, which means your focus and energy adjust well to what’s happening around you. Still, that flexibility can become uneven when stress or pressure builds.</p><p>Strengthening consistency helps you keep clarity even when routines change or demands rise.</p>'
+        };
+
+        var endingCopy = {
+          overload: '<p>It takes focus and endurance to do what you do — but it doesn’t have to be this heavy. You’re capable of staying driven without burning out, and learning how to balance that pressure is the next step.</p><p>Choose what feels right for you below.</p>',
+          loop: '<p>You’ve probably spent years thinking things through before acting — and it’s taken you far. It’s okay for focus to feel lighter. You can think deeply and move forward with ease.</p><p>Explore whichever path below feels most helpful right now.</p>',
+          stimulation: '<p>You’ve learned how to thrive under pressure — now it’s time to do the same without it. The energy that once came from chaos can come from clarity instead.</p><p>Two simple options below — take whichever suits where you are today.</p>',
+          initiation: '<p>You know what you’re capable of — you just need the right start. Change doesn’t come from forcing effort; it comes from finding rhythm.</p><p>Here are two quiet next steps to help you build it.</p>',
+          input: '<p>You take in more than most people notice — that’s not a flaw, it’s awareness. With steadier recovery, that awareness turns into insight instead of fatigue.</p><p>A few ways forward are below — start wherever feels easiest.</p>',
+          balanced: '<p>You already have a sense of balance, and that’s something worth protecting. These next steps are here to help you keep that steadiness, even when things get busy.</p><p>Take whichever feels most useful now.</p>'
+        };
+
+        function getValues(){
+          var vals = [];
+          for(var i=1;i<=8;i++){
+            var el = byId('q'+i);
+            vals.push(Number(el ? el.value : 0));
+          }
+          return vals;
+        }
+
+        function score(vals){
+          var totals = { overload:0, loop:0, stimulation:0, initiation:0, input:0 };
+          for(var idx=0; idx<vals.length; idx++){
+            var v = vals[idx];
+            if(mapping.overload[idx])    totals.overload    += v;
+            if(mapping.loop[idx])        totals.loop        += v;
+            if(mapping.stimulation[idx]) totals.stimulation += v;
+            if(mapping.initiation[idx])  totals.initiation  += v;
+            if(mapping.input[idx])       totals.input       += v;
+          }
+          return totals;
+        }
+
+        function pickResult(totals){
+          var archetypes = Object.keys(totals);
+          var max = Math.max(...Object.values(totals));
+          var candidates = archetypes.filter(k => (max - totals[k]) <= 1);
+          var key = candidates[Math.floor(Math.random() * candidates.length)];
+          return key;
+        }
+
+        function renderResult(key){
+          var result = byId('result');
+          byId('resultTitle').textContent = (titles[key] || titles.balanced);
+          byId('resultBody').innerHTML = (resultCopy[key] || resultCopy.balanced);
+          result.classList.remove('hidden');
+          result.dataset.resultKey = key;
+
+          var prompt = byId('ml-email-prompt');
+          prompt.innerHTML = 'Enter your email to receive a complete overview of <strong>' + (titles[key]||titles.balanced) + '</strong> along with a free focus guide.';
+          prompt.style.display = "block";
+
+          document.querySelectorAll('.ml-form').forEach(function(el){ el.style.display = 'none'; });
+          document.querySelectorAll('.ml-after-message').forEach(function(el){ el.classList.add('hidden'); });
+          var map = {
+            overload:    'ml-overload',
+            loop:        'ml-loop',
+            stimulation: 'ml-stimulation',
+            initiation:  'ml-initiation',
+            input:       'ml-input',
+            balanced:    'ml-balanced'
+          };
+          var targetId = map[key] || 'ml-balanced';
+          var target = byId(targetId);
+          if (target) target.style.display = 'block';
+          // smooth scroll inside modal
+          var modalScrollParent = modal.querySelector('.modal-body');
+          if (modalScrollParent) modalScrollParent.scrollTo({ top: result.offsetTop - 10, behavior: 'smooth' });
+          attachMailerLiteHandlers();
+        }
+
+        function renderEnding(key){
+          byId('endingBody').innerHTML = (endingCopy[key] || endingCopy.balanced);
+          byId('offerLink').href = "#";
+          byId('calendlyLink').href = "#";
+          byId('ending').classList.remove('hidden');
+          var modalScrollParent = modal.querySelector('.modal-body');
+          if (modalScrollParent) modalScrollParent.scrollTo({ top: byId('ending').offsetTop - 10, behavior: 'smooth' });
+        }
+
+        function handleSeeResult(){
+          try{
+            var vals = getValues();
+            var totals = score(vals);
+            var key = pickResult(totals);
+            renderResult(key);
+          }catch(e){
+            alert('Something went wrong calculating the result. Please reload and try again.');
+            console.error(e);
           }
         }
 
-        // Simple quiz demo behavior (you can replace with your full quiz JS)
-        setTimeout(function () {
-          var next = document.getElementById('quiz-next');
-          if (next) {
-            next.addEventListener('click', function () {
-              var root = document.getElementById('quiz-root');
-              var result = document.getElementById('quiz-result');
-              if (root && result) {
-                root.style.display = 'none';
-                result.classList.remove('hidden');
-              }
+        function handleReset(){
+          for(var i=1;i<=8;i++){ var el = byId('q'+i); if(el) el.value = 3; }
+          byId('result').classList.add('hidden');
+          byId('ending').classList.add('hidden');
+          byId('ml-email-prompt').style.display = "none";
+          document.querySelectorAll('.ml-form').forEach(function(el){ el.style.display = 'none'; });
+          document.querySelectorAll('.ml-after-message').forEach(function(el){ el.classList.add('hidden'); });
+          var modalScrollParent = modal.querySelector('.modal-body');
+          if (modalScrollParent) modalScrollParent.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        var mlHandlersAttached = false;
+        function attachMailerLiteHandlers(){
+          if (mlHandlersAttached) return;
+          mlHandlersAttached = true;
+          setTimeout(function(){
+            var archetypes = ['overload','loop','stimulation','initiation','input','balanced'];
+            archetypes.forEach(function(key){
+              var container = byId('ml-'+key);
+              if (!container) return;
+              var embedded = container.querySelector('.ml-embedded');
+              if (!embedded) return;
+              var observer = new MutationObserver(function(mutations){
+                mutations.forEach(function(mutation){
+                  if (mutation.type === 'childList') {
+                    var success = container.querySelector('.ml-form-success');
+                    if (success) {
+                      embedded.style.display = 'none';
+                      var after = byId('after-'+key);
+                      if (after) {
+                        after.classList.remove('hidden');
+                      }
+                      // Hide the prompt as well
+                      byId('ml-email-prompt').style.display = "none";
+                      setTimeout(function(){
+                        after && after.scrollIntoView({behavior:'smooth', block:'center'});
+                      }, 150);
+                    }
+                  }
+                });
+              });
+              observer.observe(container, { childList: true, subtree: true });
             });
-          }
-        }, 40);
+          }, 600);
+        }
+
+        // Attach the UI button handlers now that the nodes exist
+        var seeBtn = byId('seeResult');
+        var resetBtn = byId('reset');
+        if (seeBtn) seeBtn.addEventListener('click', handleSeeResult);
+        if (resetBtn) resetBtn.addEventListener('click', handleReset);
+
+        // Optionally pre-init mailerlite forms (the universal script will replace .ml-embedded containers automatically)
+        try { if (window.ml && typeof window.ml === 'function') { /* ml already initialized */ } } catch(e) {}
       }
 
+      // Focus management & show/hide modal
       function openModal() {
         previouslyFocused = document.activeElement;
         modal.classList.add('open');
         modal.setAttribute('aria-hidden', 'false');
         document.body.style.overflow = 'hidden';
-        // Load and inject quiz app
-        loadQuizApp();
+        injectQuiz();
+        // move focus to modal close button
         var focusables = getFocusable(modal);
         if (focusables.length) focusables[0].focus();
         document.addEventListener('keydown', onKeyDown);
@@ -449,8 +613,7 @@
         if (e.key === 'Tab') {
           var focusables = getFocusable(modal);
           if (!focusables.length) { e.preventDefault(); return; }
-          var first = focusables[0];
-          var last = focusables[focusables.length - 1];
+          var first = focusables[0], last = focusables[focusables.length - 1];
           if (e.shiftKey) {
             if (document.activeElement === first || document.activeElement === modal) { e.preventDefault(); last.focus(); }
           } else {
@@ -468,12 +631,12 @@
       openBtn.addEventListener('click', function (e) { e.preventDefault(); openModal(); });
       closeBtn.addEventListener('click', function (e) { e.preventDefault(); closeModal(); });
 
-      // Warm the quiz resources when the placeholder scrolls near viewport
+      // Warm the quiz when placeholder scrolls near viewport (so the forms are ready if user opens)
       if ('IntersectionObserver' in window) {
         var placeholder = document.getElementById('quiz-placeholder');
         var io = new IntersectionObserver(function (entries) {
           entries.forEach(function (entry) {
-            if (entry.isIntersecting) { loadQuizApp(); io.disconnect(); }
+            if (entry.isIntersecting) { injectQuiz(); io.disconnect(); }
           });
         }, { rootMargin: '400px 0px' });
         io.observe(placeholder);
