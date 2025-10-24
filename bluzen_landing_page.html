@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bluzen – Focus Blueprint</title>
+
+  <!-- Preconnect & font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg: #f8f9fa;
+      --text: #0f1720;
+      --accent: #5f65f2;
+      --muted: #6c757d;
+      --radius: 12px;
+      --container-max: 680px;
+      --gap: 1rem;
+    }
+
+    /* Mobile-first layout */
+    html { box-sizing: border-box; font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; scroll-behavior:smooth; }
+    *, *:before, *:after { box-sizing: inherit; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      padding: 1rem;
+      -webkit-tap-highlight-color: transparent;
+      line-height: 1.5;
+    }
+
+    .wrap {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      width: min(96%, var(--container-max));
+      background: white;
+      border-radius: 14px;
+      padding: 1.25rem;
+      box-shadow: 0 6px 20px rgba(18, 25, 40, 0.06);
+    }
+
+    header {
+      display: flex;
+      gap: var(--gap);
+      align-items: start;
+      flex-direction: column;
+    }
+
+    h1 {
+      margin: 0;
+      font-weight: 700;
+      font-size: clamp(1.25rem, 5vw, 1.75rem);
+      line-height: 1.05;
+      color: #0b1220;
+    }
+
+    .lede {
+      margin: 0;
+      color: var(--muted);
+      font-size: clamp(0.95rem, 3.5vw, 1rem);
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0.75rem;
+      margin-top: 0.75rem;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      width: 100%;
+      padding: 0.85rem 1rem;
+      background: var(--accent);
+      color: white;
+      text-decoration: none;
+      border: 0;
+      border-radius: var(--radius);
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      text-align: center;
+      transition: transform 120ms ease, box-shadow 120ms ease;
+    }
+    .btn:active { transform: translateY(1px); }
+    .btn:focus-visible { outline: 3px solid rgba(95,101,242,0.18); outline-offset: 2px; }
+
+    .btn.secondary {
+      background: #eef0ff;
+      color: #0b1220;
+      box-shadow: none;
+      font-weight: 600;
+    }
+
+    .body-copy {
+      margin-top: 1rem;
+      color: var(--text);
+      font-size: 0.98rem;
+    }
+
+    /* Modal */
+    .modal {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(8,12,20,0.45);
+      z-index: 1200;
+      padding: 1rem;
+      -webkit-overflow-scrolling: touch;
+    }
+    .modal.open { display: flex; }
+
+    .modal-dialog {
+      width: 100%;
+      max-width: 920px;
+      background: linear-gradient(180deg,#fff,#fbfdff);
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 10px 40px rgba(10,18,40,0.12);
+      display: flex;
+      flex-direction: column;
+      max-height: 96vh;
+    }
+
+    /* Full-screen style for small screens */
+    @media (max-width: 640px) {
+      .modal-dialog { border-radius: 0.75rem; height: 100%; max-height: 100vh; }
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.9rem 1rem;
+      border-bottom: 1px solid rgba(10,18,40,0.04);
+    }
+    .modal-title { margin: 0; font-size: 1rem; font-weight: 700; color: var(--text); }
+    .modal-close {
+      background: transparent;
+      border: 0;
+      font-size: 1.25rem;
+      line-height: 1;
+      padding: 0.35rem;
+      cursor: pointer;
+      color: var(--muted);
+    }
+    .modal-close:focus { outline: 3px solid rgba(95,101,242,0.16); border-radius: 6px; }
+
+    .modal-body {
+      padding: 0.75rem;
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      min-height: 240px;
+      overflow: auto;
+    }
+
+    .quiz-placeholder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted);
+      padding: 1rem;
+      background: rgba(250,250,255,0.7);
+      border-radius: 10px;
+    }
+
+    /* Accessibility helper for visually hidden labels */
+    .visually-hidden { position: absolute !important; height: 1px; width: 1px; overflow: hidden; clip: rect(1px,1px,1px,1px); white-space: nowrap; }
+
+    /* Respect reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      * { transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap" id="top">
+    <header>
+      <h1>Understand How Your Focus Actually Works</h1>
+      <p class="lede">Take the 2-minute quiz and get your personal <strong>Focus Blueprint</strong> — a quick, tailored insight into how your brain handles attention, overwhelm, and recovery.</p>
+    </header>
+
+    <div class="controls" aria-hidden="false">
+      <!-- This button opens the modal and lazy-loads the quiz app -->
+      <button class="btn" id="open-quiz" aria-haspopup="dialog" aria-controls="quiz-modal">Take the Quiz</button>
+      <a href="/about" class="btn secondary" id="learn-more" rel="noopener noreferrer">Learn More</a>
+    </div>
+
+    <p class="body-copy"><strong>At Bluzen, our focus is on making self-regulation clear, practical, and sustainable for neurodivergent minds.</strong> By combining hypnotherapy, neuroscience, and education, we help people understand how their brain and nervous system actually work — and how to work with them, not against them. <strong>Our goal is to redefine what support looks like:</strong> accessible, evidence-based, and built for the way modern minds really function.</p>
+
+    <!-- Non-JS users: direct link to the quiz or inline iframe -->
+    <noscript>
+      <div style="margin-top:1rem; padding:0.85rem; background:#fff8; border-radius:10px;">
+        <p style="margin:0 0 .5rem 0; color:var(--muted)">JavaScript is disabled. Open the quiz directly:</p>
+        <a href="https://yourquizplatform.com/embed/bluzen-quiz" style="display:inline-block;padding:.6rem .9rem;background:var(--accent);color:#fff;border-radius:10px;text-decoration:none;font-weight:600;" target="_blank" rel="noopener noreferrer">Open the quiz</a>
+      </div>
+    </noscript>
+  </main>
+
+  <!-- Modal -->
+  <div id="quiz-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-header">
+        <h2 id="modal-title" class="modal-title">Focus Blueprint — 2-minute quiz</h2>
+        <button class="modal-close" id="modal-close" aria-label="Close quiz dialog">&times;</button>
+      </div>
+
+      <div class="modal-body" id="modal-body">
+        <div id="quiz-placeholder" class="quiz-placeholder">The quiz will load when you open it — this helps save mobile data.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Template containing the quiz app (scoped styles inside) -->
+  <template id="quiz-template">
+    <div id="quiz-app">
+      <style>
+        /* Scoped quiz styles (from provided quiz code) */
+        #quiz-app{ --bg:#0f1115; --card:#151821; --ink:#e8ecf1; --muted:#a9b3c1; --accent:#64DED4; --shadow: 0 10px 30px rgba(0,0,0,.35); --radius: 16px; font-family: 'Montserrat', system-ui, -apple-system, 'Segoe UI', Roboto, Arial; }
+        #quiz-app *{box-sizing:border-box}
+        #quiz-app .wrap{ max-width:920px; margin:32px auto 80px; padding:0 20px; }
+        #quiz-app header{ display:flex; align-items:center; gap:16px; margin-bottom:24px; }
+        #quiz-app .logo{ width:42px; height:42px; border-radius:12px; background: linear-gradient(135deg, var(--accent), #4ab8b0); box-shadow:var(--shadow); overflow: hidden; display: flex; align-items: center; justify-content: center; }
+        #quiz-app .logo img { width:100%; height:100%; object-fit:cover; }
+        #quiz-app h1{ font-size:26px; margin:0; font-weight:700; letter-spacing:.2px; color:var(--ink); }
+        #quiz-app .intro{ background:linear-gradient(180deg, rgba(100,222,212,.06), rgba(100,222,212,.0)); border:1px solid rgba(100,222,212,.18); border-radius:var(--radius); padding:24px; box-shadow:var(--shadow); margin-bottom:28px; }
+        #quiz-app .intro p{margin:0 0 10px;color:var(--muted)}
+        #quiz-app .card{ background:var(--card); border:1px solid rgba(255,255,255,.06); border-radius:var(--radius); padding:22px; box-shadow:var(--shadow); margin-bottom:18px; }
+        #quiz-app .q{ display:grid; grid-template-columns: 1fr; gap:10px; margin:14px 0; }
+        #quiz-app .q label{ font-weight:600; color:var(--ink); }
+        #quiz-app .scale{ display:flex; align-items:center; gap:12px; }
+        #quiz-app input[type=range]{ -webkit-appearance:none; appearance:none; width:100%; height:6px; background:rgba(255,255,255,.08); border-radius:999px; outline:none; touch-action: pan-x; }
+        #quiz-app input[type=range]::-webkit-slider-thumb{ -webkit-appearance:none; appearance:none; width:22px; height:22px; border-radius:50%; background:var(--accent); border:2px solid #0c1212; box-shadow:0 2px 8px rgba(100,222,212,.5); cursor:pointer; margin-top:-8px; }
+        #quiz-app .tick{ font-size:12px; color:var(--muted); width:70px; text-align:center; user-select:none; }
+        #quiz-app .btn{ display:inline-flex; align-items:center; justify-content:center; padding:12px 18px; border-radius:12px; background:var(--accent); color: #062d2a; font-weight:700; border:none; box-shadow:var(--shadow); cursor:pointer; transition:transform .04s ease, filter .2s ease; touch-action: manipulation; }
+        #quiz-app .btn:active{ transform: translateY(1px) }
+        #quiz-app .btn.secondary{ background:transparent; color:var(--ink); border:1px solid rgba(255,255,255,.14); }
+        #quiz-app .actions{ display:flex; gap:12px; flex-wrap:wrap; margin-top:8px }
+        #quiz-app .hidden{ display:none }
+        #quiz-app .result, #quiz-app .ending{ background:var(--card); border:1px solid rgba(255,255,255,.06); border-radius:var(--radius); padding:22px; box-shadow:var(--shadow); margin-top:18px; }
+        #quiz-app .result h2, #quiz-app .ending h2{ margin:0 0 8px 0; font-size:20px; color:var(--ink); }
+        #quiz-app .result p, #quiz-app .ending p{ color:var(--muted); margin:8px 0; }
+        #quiz-app footer{ margin-top:40px; color:var(--muted); font-size:12px; text-align:center; }
+        #quiz-app .grid{ display:grid; gap:14px; }
+        @media (min-width:820px){ #quiz-app .grid{ grid-template-columns: 1fr 1fr } }
+        #quiz-app .pill{ display:inline-flex; gap:10px; align-items:center; background:rgba(100,222,212,.1); color:#bff5ef; padding:6px 10px; border-radius:999px; border:1px solid rgba(100,222,212,.25); font-size:12px; margin-bottom:4px; }
+
+        /* MailerLite embed tweaks (scoped) */
+        #quiz-app .ml-embedded, #quiz-app .ml-form-embedContainer, #quiz-app .ml-form-embedWrapper, #quiz-app .ml-form-embedBody, #quiz-app .ml-form-embed {
+          background: none !important;
+          color: var(--ink) !important;
+          font-family: 'Montserrat', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif !important;
+          border-radius: 14px !important;
+          box-shadow: none !important;
+          border: none !important;
+          padding: 0 !important;
+          margin: 0 auto 0 !important;
+          width: 100% !important;
+          max-width: 420px !important;
+        }
+        #quiz-app .ml-embedded input[type="email"], #quiz-app .ml-embedded input[type="text",
+        #quiz-app .ml-form-embedBody input[type="email"], #quiz-app .ml-form-embedBody input[type="text"] {
+          width: 100% !important; background-color: #16191C !important; color: #F5F5F5 !important;
+          border: 1px solid #2A2D30 !important; border-radius: 10px !important;
+          padding: 12px 14px !important; font-size: 17px !important; margin-top: 10px !important;
+        }
+        #quiz-app .ml-embedded input[type="email"]::placeholder, #quiz-app .ml-embedded input[type="text"]::placeholder { color: #B0B3B5 !important; }
+        #quiz-app .ml-embedded input[type="email"]:focus, #quiz-app .ml-embedded input[type="text"]:focus {
+          border-color: #64DED4 !important; background-color: #1C1F23 !important;
+          outline: none !important; box-shadow: 0 0 6px rgba(100, 222, 212, 0.3) !important;
+        }
+        #quiz-app .ml-embedded button, #quiz-app .ml-embedded input[type="submit"], #quiz-app .ml-form-embedBody .primary {
+          background-color: #64DED4 !important; color: #0F1113 !important; border: none !important;
+          border-radius: 10px !important; padding: 12px 18px !important; font-size: 16px !important;
+          font-weight: 600 !important; cursor: pointer !important; width: 100% !important; margin-top: 16px !important;
+          transition: background-color .25s ease, transform .1s ease !important;
+        }
+        #quiz-app .ml-embedded button:hover, #quiz-app .ml-embedded input[type="submit"]:hover, #quiz-app .ml-form-embedBody .primary:hover {
+          background-color: #4AC6BD !important; transform: translateY(-1px) !important;
+        }
+        #quiz-app .ml-form-embedFooter, #quiz-app .ml-form-successContent .ml-form-successContentFooter,
+        #quiz-app .ml-form-success, #quiz-app .ml-form-successContent { display: none !important; }
+        #quiz-app .ml-after-message {
+          background: rgba(100,222,212,.07);
+          border-radius: 12px;
+          padding: 16px 18px;
+          color: var(--ink);
+          margin-top: 16px;
+          font-size: 1.07em;
+          animation: fadeIn 0.4s;
+        }
+        #quiz-app .ml-email-prompt {
+          margin-bottom: 13px;
+          margin-top: 16px;
+          font-size: 1.12em;
+          color: var(--ink);
+          background: rgba(100,222,212,.09);
+          border-radius: 10px;
+          padding: 11px 13px;
+          font-weight: 500;
+          text-align: left;
+          box-shadow: 0 2px 10px rgba(100,222,212,0.04);
+        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px);} to { opacity: 1; transform: translateY(0);} }
+        /* iOS zoom fix */
+        #quiz-app input[type="email"], #quiz-app input[type="text"] { font-size: 17px !important; }
+      </style>
+
+      <div class="wrap">
+        <header>
+          <div class="logo" aria-hidden="true">
+            <img src="logo.png" alt="Bluzen Logo" />
+          </div>
+          <h1>Bluzen Cognitive Regulation Quiz</h1>
+        </header>
+
+        <section class="intro card">
+          <p class="pill">2-minute quiz</p>
+          <p class="lead" style="margin:0;color:var(--muted)">Understand how your attention, overwhelm, and recovery work so you can make simple, practical changes.</p>
+        </section>
+
+        <!-- Simplified quiz skeleton (the rest of your detailed quiz HTML/JS can be added here) -->
+        <div id="quiz-root">
+          <div class="card">
+            <div class="q">
+              <label for="q1">When you start a task, how often do you feel focused?</label>
+              <div class="scale">
+                <input id="q1" type="range" min="0" max="100" value="50">
+              </div>
+              <div class="tick">Sometimes</div>
+            </div>
+
+            <div class="actions">
+              <button id="quiz-next" class="btn">Next</button>
+              <button id="quiz-skip" class="btn secondary">Skip</button>
+            </div>
+          </div>
+
+          <div class="result hidden" id="quiz-result">
+            <h2>Your Focus Blueprint</h2>
+            <p class="muted">A short personalised insight — upgradeable with your email.</p>
+            <!-- MailerLite embed placeholder (the platform script will convert this) -->
+            <div class="ml-form-embedContainer ml-site-1530129" data-account="1530129">
+              <!-- Real MailerLite embed will be initialized by their universal script -->
+            </div>
+          </div>
+        </div>
+
+        <footer>
+          <small>Privacy-focused. No unnecessary tracking.</small>
+        </footer>
+      </div>
+    </div>
+  </template>
+
+  <script>
+    (function () {
+      var openBtn = document.getElementById('open-quiz');
+      var modal = document.getElementById('quiz-modal');
+      var closeBtn = document.getElementById('modal-close');
+      var modalBody = document.getElementById('modal-body');
+      var template = document.getElementById('quiz-template');
+      var previouslyFocused = null;
+      var quizLoaded = false;
+
+      function getFocusable(el) {
+        if (!el) return [];
+        return Array.prototype.slice.call(el.querySelectorAll('a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, [tabindex]:not([tabindex="-1"])'))
+          .filter(function (node) { return node.offsetWidth > 0 || node.offsetHeight > 0 || node === document.activeElement; });
+      }
+
+      // Inject the quiz HTML (from the template) into the modal body and load MailerLite
+      function loadQuizApp() {
+        if (quizLoaded) return;
+        var content = template.content.cloneNode(true);
+        // extract the mailerlite account if present
+        var mlContainer = content.querySelector('.ml-site-1530129');
+        modalBody.innerHTML = ''; // clear placeholder
+        modalBody.appendChild(content);
+        quizLoaded = true;
+
+        // Load MailerLite universal script and init account (if container exists)
+        if (mlContainer) {
+          var account = mlContainer.getAttribute('data-account');
+          if (account && typeof window.ml === 'undefined') {
+            var s = document.createElement('script');
+            s.src = 'https://assets.mailerlite.com/js/universal.js';
+            s.async = true;
+            s.onload = function () {
+              try { window.ml('account', account); } catch (e) { /* ignore */ }
+            };
+            document.body.appendChild(s);
+          } else if (account && window.ml) {
+            try { window.ml('account', account); } catch (e) { }
+          }
+        }
+
+        // Simple quiz demo behavior (you can replace with your full quiz JS)
+        setTimeout(function () {
+          var next = document.getElementById('quiz-next');
+          if (next) {
+            next.addEventListener('click', function () {
+              var root = document.getElementById('quiz-root');
+              var result = document.getElementById('quiz-result');
+              if (root && result) {
+                root.style.display = 'none';
+                result.classList.remove('hidden');
+              }
+            });
+          }
+        }, 40);
+      }
+
+      function openModal() {
+        previouslyFocused = document.activeElement;
+        modal.classList.add('open');
+        modal.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+        // Load and inject quiz app
+        loadQuizApp();
+        var focusables = getFocusable(modal);
+        if (focusables.length) focusables[0].focus();
+        document.addEventListener('keydown', onKeyDown);
+        modal.addEventListener('click', onOutsideClick);
+      }
+
+      function closeModal() {
+        modal.classList.remove('open');
+        modal.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+        if (previouslyFocused && previouslyFocused.focus) previouslyFocused.focus();
+        document.removeEventListener('keydown', onKeyDown);
+        modal.removeEventListener('click', onOutsideClick);
+      }
+
+      function onKeyDown(e) {
+        if (e.key === 'Escape' || e.key === 'Esc') { e.preventDefault(); closeModal(); return; }
+        if (e.key === 'Tab') {
+          var focusables = getFocusable(modal);
+          if (!focusables.length) { e.preventDefault(); return; }
+          var first = focusables[0];
+          var last = focusables[focusables.length - 1];
+          if (e.shiftKey) {
+            if (document.activeElement === first || document.activeElement === modal) { e.preventDefault(); last.focus(); }
+          } else {
+            if (document.activeElement === last) { e.preventDefault(); first.focus(); }
+          }
+        }
+      }
+
+      function onOutsideClick(e) {
+        var dialog = modal.querySelector('.modal-dialog');
+        if (!dialog) return;
+        if (!dialog.contains(e.target)) { closeModal(); }
+      }
+
+      openBtn.addEventListener('click', function (e) { e.preventDefault(); openModal(); });
+      closeBtn.addEventListener('click', function (e) { e.preventDefault(); closeModal(); });
+
+      // Warm the quiz resources when the placeholder scrolls near viewport
+      if ('IntersectionObserver' in window) {
+        var placeholder = document.getElementById('quiz-placeholder');
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) { loadQuizApp(); io.disconnect(); }
+          });
+        }, { rootMargin: '400px 0px' });
+        io.observe(placeholder);
+      }
+
+    })();
+  </script>
+</body>
+</html>
